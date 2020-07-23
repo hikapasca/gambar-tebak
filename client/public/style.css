@@ -1,0 +1,80 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#homepage {
+    text-align: center;
+    padding: 230px;
+    background: yellow;
+}
+
+#lobby {
+    background: green;
+    padding: 50px;
+    font-weight: bold;
+}
+
+#lobby h2 {
+    text-align: center;
+    margin: 10px;
+}
+
+#roomForm {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+#answerForm {
+    display: flex;
+    justify-content: center;
+}
+
+#gameRoom {
+    background: maroon;
+    padding: 10px;
+    height: 610px;
+}
+
+#question img {
+    display: block;
+    margin: 20px auto;
+    width: 400px;
+}
+
+#question h3 {
+    text-align: center;
+    margin: 10px;
+    font-weight: bold;
+    color: white;
+}
+
+#question button {
+    display: block;
+    text-align: center;
+    margin: 0px auto;
+}
+
+#roomPage {
+    margin: 50px;
+}
+
+.box {
+    background-color: linen;
+    padding: 20px;
+    height: 200px;
+    border-radius: 50px;
+    margin: 10px;
+}
+
+#leaderHeader {
+    text-align: center;
+    margin: 30px;
+}
+
+#leaderTable {
+    padding: 20px 400px;
+    text-align: center;
+}
+
