@@ -21,6 +21,7 @@ export default {
   },
   methods: {
     addUser() {
+      this.$store.commit('ADD_USER', this.user)
       localStorage.setItem(`user`, this.user)
       this.$router.push({name: 'Lobby'})
     }

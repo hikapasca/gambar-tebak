@@ -23,6 +23,9 @@
 </template>
 
 <script>
+import io from "socket.io-client";
+const socket = io("http://localhost:3000");
+
 export default {
   name: 'Game',
   data() {
@@ -33,33 +36,82 @@ export default {
         score: 0
     }
   },
-  created() {
-    this.$store.dispatch('getQuestion')
-    // console.log(this.$store.state.questions, `hai ini question`)
-  },
+    created() {
+        this.$store.dispatch('getQuestion')
+        socket.on("gameStart",  (score) => {
+             let userScore = {
+                user: localStorage.user,
+                score: 0
+            }
+            console.log(score, `ini di gamestart`)
+            this.gameOn = false
+            console.log(this.gameOn, `ini di gamestart`)
+            this.$store.commit('PUSH_SCORE', userScore)
+            this.$store.commit('PUSH_SCORE', score)
+        })
+        socket.on("nextQuestion",  (count) => {
+            // console.log(count, `ini count`)
+            this.count = count
+        })
+        socket.on("pushAnswer",  (answer) => {
+            this.$store.commit('PUSH_ANSWER', answer)
+        })
+        socket.on("resetAnswer",  () => {
+            this.$store.commit('RESET_ANSWER')
+        })
+        // socket.on("pushScore",  (score) => {
+        //     this.$store.commit('PUSH_SCORE', score)
+        // })
+        socket.on("toLeaderBoard",  () => {
+            this.$router.push({name: 'LeaderBoard'})
+        })
+
+        socket.on("updatenext", (data) => {
+            this.$store.commit('UPDATE_SCORE', data.user)
+            this.count = data.count
+        })
+
+        socket.on("updateEnd", (data) => {
+            this.$store.commit('UPDATE_SCORE', data.user)
+            this.$router.push({name: 'LeaderBoard'})
+            this.$store.commit('RESET_ANSWER')
+        })
+    },
   methods: {
     gameStart() {
-        this.gameOn = false
+        let userScore = {
+                user: localStorage.user,
+                score: 0
+            }
+        // this.$store.commit('PUSH_SCORE', userScore)
+        // this.gameOn = false
+        socket.emit("gameStart", userScore)
     },
     nextQuestion() {
         this.$store.commit('PUSH_ANSWER', this.answer)
-
-        if (this.answer.toLowerCase() == this.$store.state.questions[this.count].answer && this.count < 2) {
-            this.score+=10
-            this.answer = ''
-            this.count++
+        socket.emit("pushAnswer", this.answer)
+        // console.log(this.count, `sebelum if`)
+        if (this.count < 5) {
+            // console.log(this.answer, this.$store.state.questions[this.count].answer, 'ini answer')
+            if (this.answer.toLowerCase() == this.$store.state.questions[this.count].answer) {
+                this.$store.commit('UPDATE_SCORE', localStorage.user)
+                // socket.emit("updateScore", localStorage.user)
+                // socket.emit("nextQuestion", this.count)
+                this.count++
+                console.log(this.count)
+                console.log(this.$store.state.finalScore)
+                socket.emit('updatenext', {user: localStorage.user, count: this.count})
+                // console.log(this.count, `ini dalam count`)
+            }
         } else {
             if (this.answer.toLowerCase() == this.$store.state.questions[this.count].answer) {
-            this.score+=10
+                this.$store.commit('UPDATE_SCORE', localStorage.user)
+                this.$router.push({name: 'LeaderBoard'})
+                this.$store.commit('RESET_ANSWER')
+                socket.emit('updateEnd', {user: localStorage.user})
             }
-            let userScore = {
-                user: localStorage.user,
-                score: this.score
-            }
-            this.$store.commit('PUSH_SCORE', userScore)
-            this.$store.commit('RESET_ANSWER')
-            this.$router.push({name: 'LeaderBoard'})
         }
+        this.answer = ''
     }
   }
 };
