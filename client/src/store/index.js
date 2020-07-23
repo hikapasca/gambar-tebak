@@ -33,19 +33,6 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    getLeaderboard(context) {
-      axios({
-        method: 'GET',
-        url: 'http://localhost:3000/leaderboards',
-      })
-        .then((result) => {
-          console.log(result.data);
-          context.commit('READ_LEADERBOARD', result.data);
-        })
-        .catch((err) => {
-          console.log(err.response);
-        });
-    },
     getQuestion(context) {
       axios({
         method: 'GET',
@@ -58,20 +45,7 @@ export default new Vuex.Store({
         .catch((err) => {
           console.log(err.response);
         });
-    },
-    addLeaderboard(context, payload) {
-      axios({
-        method: 'POST',
-        url: 'http://localhost:3000/leaderboards',
-      })
-        .then((result) => {
-          console.log(result.data);
-          context.commit('READ_QUESTION', payload);
-        })
-        .catch((err) => {
-          console.log(err.response);
-        });
-    },
+    }
   },
   modules: {},
 });
