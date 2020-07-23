@@ -1,60 +1,77 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import axios from "axios";
+import Vue from 'vue';
+import Vuex from 'vuex';
+import axios from 'axios';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     leaderboard: [],
-    question: []
+    questions: [],
+    allAnswers: [],
+    finalScore: []
   },
   mutations: {
     READ_LEADERBOARD(state, payload) {
       state.leaderboard = payload;
     },
-    READ_QUESTION(state, payload) {}
+    READ_QUESTION(state, payload) {
+      state.questions = payload
+      console.log(state.questions, `ini di mutasi`)
+    },
+    PUSH_ANSWER(state, payload) {
+      state.allAnswers.push(payload)
+    },
+    PUSH_SCORE(state, payload) {
+      state.finalScore.push(payload)
+    },
+    RESET_ANSWER(state) {
+      state.allAnswers = []
+    },
+    RESET_SCORE(state) {
+      state.finalScore = []
+    }
   },
   actions: {
     getLeaderboard(context) {
       axios({
-        method: "GET",
-        url: "http://localhost:3000/leaderboards"
+        method: 'GET',
+        url: 'http://localhost:3000/leaderboards',
       })
-        .then(result => {
+        .then((result) => {
           console.log(result.data);
-          context.commit("READ_LEADERBOARD", result.data);
+          context.commit('READ_LEADERBOARD', result.data);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err.response);
         });
     },
     getQuestion(context) {
       axios({
-        method: "GET",
-        url: "http://localhost:3000/questions"
+        method: 'GET',
+        url: 'http://localhost:3000/questions',
       })
-        .then(result => {
-          console.log(result);
-          context.commit("READ_QUESTION", result.data);
+        .then((result) => {
+          console.log(result, `ini result`);
+          context.commit('READ_QUESTION', result.data);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err.response);
         });
     },
     addLeaderboard(context, payload) {
       axios({
-        method: "POST",
-        url: "http://localhost:3000/leaderboards"
+        method: 'POST',
+        url: 'http://localhost:3000/leaderboards',
       })
-        .then(result => {
+        .then((result) => {
           console.log(result.data);
-          context.commit("READ_QUESTION", payload);
+          context.commit('READ_QUESTION', payload);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err.response);
         });
-    }
+    },
   },
-  modules: {}
+  modules: {},
 });

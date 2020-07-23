@@ -13,8 +13,8 @@
 
 <script>
 export default {
- name: 'Room'
-}
+  name: 'Room',
+};
 </script>
 
 <style>
