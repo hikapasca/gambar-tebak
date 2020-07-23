@@ -1,0 +1,27 @@
+{
+  "name": "gambar-tebak",
+  "version": "1.0.0",
+  "description": "group project hacktiv8 PI-044",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hikapasca/gambar-tebak.git"
+  },
+  "keywords": [],
+  "author": "Hika, Mayana, Luqman, Marnatal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hikapasca/gambar-tebak/issues"
+  },
+  "homepage": "https://github.com/hikapasca/gambar-tebak#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "pg": "^8.3.0",
+    "sequelize": "^6.3.3",
+    "socket.io": "^2.3.0"
+  }
+}
