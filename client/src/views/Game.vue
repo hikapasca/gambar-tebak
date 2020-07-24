@@ -1,55 +1,51 @@
 <template>
-  <div>
-    <div id="gameRoom">
-      <div id="buttonBeforeGame" v-if="gameOn">
-        <!-- <div style="width: 500px; height:500px"> -->
-        <svg width="300" height="300" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="60,30 90,90 30,90">
-            <animateTransform
-              attributeName="transform"
-              attributeType="XML"
-              type="rotate"
-              from="0 60 70"
-              to="360 60 70"
-              dur="10s"
-              repeatCount="indefinite"
-            />
-          </polygon>
-        </svg>
-        <!-- </div> -->
-        <button id="buttonGame" class="btn btn-success btn-lg" @click="gameStart">Start!</button>
-      </div>
-      <div v-else>
-        <div id="question">
-          <h3>{{$store.state.questions[this.count].answer}}</h3>
-          <button @click="toLobby" class="btn btn-warning btn-sm">Leave Room</button>
-          <div id="image">
-            <img :src="$store.state.questions[this.count].imageUrl" alt="ini gambar." />
-            <div
-              class="bg-light overflow-auto d-flex flex-column"
-              style="height: 300px; width: 400px;"
-            >
-              <span
-                class="mt-0"
-                v-for="(item, index) in $store.state.allAnswers"
-                :key="index"
-              >{{item}}</span>
-            </div>
+  <div id="gameRoom">
+    <div id="buttonBeforeGame" v-if="gameOn">
+      <svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="60,30 90,90 30,90">
+          <animateTransform
+            attributeName="transform"
+            attributeType="XML"
+            type="rotate"
+            from="0 60 70"
+            to="360 60 70"
+            dur="10s"
+            repeatCount="indefinite"
+          />
+        </polygon>
+      </svg>
+      <button id="buttonGame" class="btn btn-success btn-lg" @click="gameStart">Start!</button>
+    </div>
+    <div v-else>
+      <div id="question">
+        <h3>Apa ya jawabannya???</h3>
+        <button @click="toLobby" class="btn btn-warning btn-sm">Leave Room</button>
+        <div id="image">
+          <img :src="$store.state.questions[this.count].imageUrl" alt="ini gambar." />
+          <div
+            class="bg-light overflow-auto d-flex flex-column"
+            style="height: 300px; width: 400px;"
+          >
+            <span
+              class="mt-0"
+              v-for="(item, index) in $store.state.allAnswers"
+              :key="index"
+            >{{item}}</span>
           </div>
         </div>
-        <div id="answerForm">
-          <form @submit.prevent="nextQuestion">
-            <input
-              style="width: 400px;"
-              type="text"
-              name="answer"
-              v-model="answer"
-              placeholder="Jawabanmu..."
-            />
-            &nbsp;
-            <button class="btn btn-success" type="submit">Jawab!</button>
-          </form>
-        </div>
+      </div>
+      <div id="answerForm">
+        <form @submit.prevent="nextQuestion">
+          <input
+            style="width: 400px;"
+            type="text"
+            name="answer"
+            v-model="answer"
+            placeholder="Jawabanmu..."
+          />
+          &nbsp;
+          <button class="btn btn-success" type="submit">Jawab!</button>
+        </form>
       </div>
     </div>
   </div>
@@ -67,14 +63,10 @@ export default {
       gameOn: true,
       count: 0,
       answer: "",
-      score: 0,
-      audio: new Audio(require("../assets/soundEntry.mp3")),
-      gameBacksound: new Audio(require("../assets/gameBackGround.mp3")),
+      score: 0
     };
   },
   created() {
-    this.enterSoundGame();
-
     this.$store.dispatch("getQuestion");
     socket.on("gameStart", () => {
       this.gameOn = false;
@@ -82,7 +74,7 @@ export default {
     // socket.on("updateScore",  (user) => {
     //     this.$store.dispatch('updateLeaderboard', user)
     // })
-    socket.on("pushAnswer", (answer) => {
+    socket.on("pushAnswer", answer => {
       this.$store.commit("PUSH_ANSWER", answer);
     });
     socket.on("resetAnswer", () => {
@@ -95,12 +87,17 @@ export default {
       this.$router.push({ name: "LeaderBoard" });
     });
 
-    socket.on("updatenext", (data) => {
+    socket.on("updatenext", data => {
       this.$store.commit("UPDATE_SCORE", data.user);
       this.count = data.count;
     });
 
     socket.on("updateEnd", () => {
+      const userScore = {
+        name: localStorage.user,
+        score: this.score
+      };
+      this.$store.dispatch("updateLeaderboard", userScore);
       // this.$store.commit('UPDATE_SCORE', data.user)
       this.$router.push({ name: "LeaderBoard" });
       this.$store.commit("RESET_ANSWER");
@@ -109,6 +106,7 @@ export default {
   methods: {
     toLobby() {
       this.$store.commit("RESET_SCORE");
+
       this.$router.push({ name: "Lobby" });
     },
     gameStart() {
@@ -119,14 +117,6 @@ export default {
       // this.$store.dispatch('addLeaderboard', userScore)
       this.gameOn = false;
       socket.emit("gameStart");
-      const userScore = {
-        user: localStorage.user,
-        score: 0,
-      };
-      this.audio.pause();
-      this.audio.currentTime = 0;
-      this.gameBacksound.play();
-      socket.emit("gameStart", userScore);
     },
     nextQuestion() {
       this.$store.commit("PUSH_ANSWER", this.answer);
@@ -145,39 +135,38 @@ export default {
           this.count++;
           socket.emit("updatenext", {
             user: localStorage.user,
-            count: this.count,
+            count: this.count
           });
           // console.log(this.count, `ini dalam count`)
         }
-      } else {
-        if (
-          this.answer.toLowerCase() ==
-          this.$store.state.questions[this.count].answer
-        ) {
-          this.score += 10;
-          // this.$store.commit('UPDATE_SCORE', localStorage.user)
-          this.$store.commit("RESET_ANSWER");
-          socket.emit("updateEnd");
-          this.gameBacksound.pause();
-          this.gameBacksound.currentTime = 0;
-          this.$router.push({ name: "LeaderBoard" });
-        }
-      }
-
-      if (this.count === 2) {
-        let userScore = {
+      } else if (
+        this.answer.toLowerCase() ==
+        this.$store.state.questions[this.count].answer
+      ) {
+        this.score += 10;
+        const userScore = {
           name: localStorage.user,
-          score: this.score,
+          score: this.score
         };
         this.$store.dispatch("updateLeaderboard", userScore);
+        // this.$store.commit('UPDATE_SCORE', localStorage.user)
+        //   this.$store.commit("RESET_ANSWER");
+        socket.emit("updateEnd");
+
+        //   this.$router.push({ name: "LeaderBoard" });
       }
-      console.log(this.score, `ini score`);
+
+      //   if (this.count === 2) {
+      //     const userScore = {
+      //       name: localStorage.user,
+      //       score: this.score
+      //     };
+      //     this.$store.dispatch("updateLeaderboard", userScore);
+      //   }
+      console.log(this.score, "ini score");
       this.answer = "";
-    },
-    enterSoundGame() {
-      this.audio.play();
-    },
-  },
+    }
+  }
 };
 </script>
 

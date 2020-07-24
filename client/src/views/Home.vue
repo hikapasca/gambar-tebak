@@ -23,7 +23,7 @@ export default {
   name: "Home",
   data() {
     return {
-      user: "",
+      user: ""
     };
   },
   methods: {
@@ -37,8 +37,8 @@ export default {
       this.$store.commit("ADD_USER", this.user);
       localStorage.setItem("user", this.user);
       this.$router.push({ name: "Lobby" });
-    },
-  },
+    }
+  }
 };
 </script>
 

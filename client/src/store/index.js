@@ -41,6 +41,7 @@ export default new Vuex.Store({
     },
     ADDED_SCORE(state, payload) {
       state.dataUser = payload;
+      console.log(state.dataUser, "ini show all");
       console.log(state.dataUser, `ini show all`);
     },
     UPDATED_SCORE(state, payload) {
@@ -60,12 +61,14 @@ export default new Vuex.Store({
   },
   actions: {
     getQuestion(context) {
+      console.log("apapapapa");
       axios({
         method: "GET",
         url: "http://localhost:3000/questions"
       })
         .then(result => {
           // console.log(result, `ini result`);
+          console.log("paakakakakak");
           context.commit("READ_QUESTION", result.data);
         })
         .catch(err => {
@@ -79,6 +82,7 @@ export default new Vuex.Store({
         name: payload.name,
         score: payload.score
       };
+      console.log(updateLeaderboard, "ini yg mau update");
       console.log(updateLeaderboard, `ini yg mau update`);
       axios({
         method: "PUT",

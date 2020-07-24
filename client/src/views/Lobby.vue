@@ -59,7 +59,7 @@ const socket = io("http://localhost:3000");
 export default {
   name: "Lobby",
   components: {
-    Room,
+    Room
   },
   created() {
     // socket.on("gameOn", (user) => {
@@ -69,7 +69,7 @@ export default {
   computed: {
     userName() {
       return localStorage.user;
-    },
+    }
   },
   methods: {
     toLeaderBoard() {
@@ -83,13 +83,13 @@ export default {
     playGame() {
       let userScore = {
         name: localStorage.user,
-        score: 0,
+        score: 0
       };
       this.$store.dispatch("addLeaderboard", userScore);
       // socket.emit("gameOn", userScore)
       this.$router.push({ name: "Game" });
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -1,29 +1,22 @@
 <template>
-  <div>
-    <div id="leaderboard">
-      <div id="boxLeader">
-        <div id="leaderHeader">
-          <h1>Hasil Kerecehan</h1>
-          <button @click="balikLobby" class="btn btn-primary">Balik Lobby</button>
-        </div>
-        <div id="leaderTable">
-          <table class="table table-light">
-            <thead>
-              <tr>
-                <th scope="col">Nama</th>
-                <th scope="col">Score</th>
-              </tr>
-            </thead>
-            <tbody>
-              <LeaderData
-                v-for="(user, index) in $store.state.finalScore"
-                :key="index"
-                :score="user"
-              ></LeaderData>
-            </tbody>
-          </table>
-          <p>{{this.$store.state.dataUser}}</p>
-        </div>
+  <div id="leaderboard">
+    <div id="boxLeader">
+      <div id="leaderHeader">
+        <h1>Hasil Kerecehan</h1>
+        <button @click="balikLobby" class="btn btn-primary">Balik Lobby</button>
+      </div>
+      <div id="leaderTable">
+        <table class="table table-light">
+          <thead>
+            <tr>
+              <th scope="col">Nama</th>
+              <th scope="col">Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <LeaderData v-for="(user, index) in $store.state.dataUser" :key="index" :score="user"></LeaderData>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -37,11 +30,11 @@ const socket = io("http://localhost:3000");
 export default {
   name: "LeaderBoard",
   components: {
-    LeaderData,
+    LeaderData
   },
   data() {
     return {
-      leaderboardSound: new Audio(require("../assets/leaderboardSound.mp3")),
+      leaderboardSound: new Audio(require("../assets/leaderboardSound.mp3"))
     };
   },
   created() {
@@ -59,8 +52,8 @@ export default {
       this.leaderboardSound.currentTime = 0;
       this.$store.dispatch("deleteLeaderboard");
       this.$router.push({ name: "Lobby" });
-    },
-  },
+    }
+  }
 };
 </script>
 
