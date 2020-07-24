@@ -6,7 +6,7 @@
         <button @click="balikLobby" class="btn btn-primary">Balik Lobby</button>
       </div>
       <div id="leaderTable">
-        <table class="table table-dark">
+        <table class="table table-light">
           <thead>
             <tr>
               <th scope="col">Nama</th>
@@ -17,37 +17,43 @@
             <LeaderData v-for="(user, index) in $store.state.dataUser" :key="index" :score="user"></LeaderData>
           </tbody>
         </table>
-        <!-- <p>{{this.$store.state.dataUser}}</p> -->
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import io from 'socket.io-client';
-import LeaderData from '../components/LeaderData.vue';
-
-const socket = io('http://localhost:3000');
+import LeaderData from "../components/LeaderData.vue";
+import io from "socket.io-client";
+const socket = io("http://localhost:3000");
 
 export default {
-  name: 'LeaderBoard',
+  name: "LeaderBoard",
   components: {
-    LeaderData,
+    LeaderData
+  },
+  data() {
+    return {
+      leaderboardSound: new Audio(require("../assets/leaderboardSound.mp3"))
+    };
   },
   created() {
+    this.leaderboardSound.play();
     //   socket.on("deleteScore",  () => {
     //     this.$store.dispatch('deleteLeaderboard')
     // })
-    this.$store.dispatch('showLeaderboard');
+    this.$store.dispatch("showLeaderboard");
   },
   methods: {
     balikLobby() {
       // this.$store.commit('RESET_SCORE')
       // socket.emit("deleteScore")
-      this.$store.dispatch('deleteLeaderboard');
-      this.$router.push({ name: 'Lobby' });
-    },
-  },
+      this.leaderboardSound.pause();
+      this.leaderboardSound.currentTime = 0;
+      this.$store.dispatch("deleteLeaderboard");
+      this.$router.push({ name: "Lobby" });
+    }
+  }
 };
 </script>
 
