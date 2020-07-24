@@ -41,21 +41,21 @@ export default {
   },
   computed: {
     userName() {
-        return localStorage.user
-    }
+      return localStorage.user;
+    },
   },
   methods: {
     toLeaderBoard() {
-        this.$router.push({name: 'LeaderBoard'})
+      this.$router.push({ name: 'LeaderBoard' });
     },
     logout() {
-        localStorage.clear()
-        this.$router.push({name: 'Home'})
+      localStorage.clear();
+      this.$router.push({ name: 'Home' });
     },
     playGame() {
-        this.$router.push({name: 'Game'})
-    }
-  }
+      this.$router.push({ name: 'Game' });
+    },
+  },
 };
 </script>
 

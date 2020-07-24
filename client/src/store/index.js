@@ -12,38 +12,38 @@ export default new Vuex.Store({
     questions: [],
     allAnswers: [],
     finalScore: [],
-    username: ''
+    username: '',
   },
   mutations: {
     ADD_USER(state, payload) {
-      state.username = payload
+      state.username = payload;
     },
     READ_LEADERBOARD(state, payload) {
       state.leaderboard = payload;
     },
     READ_QUESTION(state, payload) {
-      state.questions = payload
+      state.questions = payload;
       // console.log(state.questions, `ini di mutasi`)
     },
     PUSH_ANSWER(state, payload) {
-      state.allAnswers.push(payload)
+      state.allAnswers.push(payload);
     },
     PUSH_SCORE(state, payload) {
-      state.finalScore.push(payload)
+      state.finalScore.push(payload);
     },
     UPDATE_SCORE(state, payload) {
-      state.finalScore.forEach(element => {
+      state.finalScore.forEach((element) => {
         if (element.user === payload) {
-          element.score+=10
+          element.score += 10;
         }
       });
     },
     RESET_ANSWER(state) {
-      state.allAnswers = []
+      state.allAnswers = [];
     },
     RESET_SCORE(state) {
-      state.finalScore = []
-    }
+      state.finalScore = [];
+    },
   },
   actions: {
     getQuestion(context) {
@@ -58,7 +58,7 @@ export default new Vuex.Store({
         .catch((err) => {
           console.log(err.response);
         });
-    }
+    },
   },
   modules: {},
 });
