@@ -5,4 +5,8 @@ router.get("/", LeaderboardController.read);
 
 router.post("/", LeaderboardController.add);
 
+router.put("/", LeaderboardController.update);
+
+router.delete("/", LeaderboardController.delete);
+
 module.exports = router;

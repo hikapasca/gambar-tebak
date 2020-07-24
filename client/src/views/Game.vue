@@ -1,29 +1,55 @@
 <template>
-  <div id="gameRoom">
-    <button v-if="gameOn" @click.prevent="gameStart">Start!</button>
-    <div v-else>
-      <div id="question">
-        <h3>{{$store.state.questions[this.count].answer}}</h3>
-        <button @click="toLobby" class="btn btn-warning btn-sm">Leave Room</button>
-        <div id="image">
-          <img :src="$store.state.questions[this.count].imageUrl" alt="ini gambar." />
-        </div>
+  <div>
+    <div id="gameRoom">
+      <div id="buttonBeforeGame" v-if="gameOn">
+        <!-- <div style="width: 500px; height:500px"> -->
+        <svg width="300" height="300" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="60,30 90,90 30,90">
+            <animateTransform
+              attributeName="transform"
+              attributeType="XML"
+              type="rotate"
+              from="0 60 70"
+              to="360 60 70"
+              dur="10s"
+              repeatCount="indefinite"
+            />
+          </polygon>
+        </svg>
+        <!-- </div> -->
+        <button id="buttonGame" class="btn btn-success btn-lg" @click="gameStart">Start!</button>
       </div>
-      <div id="answerForm" class="d-flex flex-column">
-        <div class="bg-light overflow-auto d-flex flex-column" style="height: 50px;">
-          <span class="mt-0" v-for="(item, index) in $store.state.allAnswers" :key="index">{{item}}</span>
+      <div v-else>
+        <div id="question">
+          <h3>{{$store.state.questions[this.count].answer}}</h3>
+          <button @click="toLobby" class="btn btn-warning btn-sm">Leave Room</button>
+          <div id="image">
+            <img :src="$store.state.questions[this.count].imageUrl" alt="ini gambar." />
+            <div
+              class="bg-light overflow-auto d-flex flex-column"
+              style="height: 300px; width: 400px;"
+            >
+              <span
+                class="mt-0"
+                v-for="(item, index) in $store.state.allAnswers"
+                :key="index"
+              >{{item}}</span>
+            </div>
+          </div>
         </div>
-        <form @submit.prevent="nextQuestion">
-          <input
-            style="width: 400px;"
-            type="text"
-            name="answer"
-            v-model="answer"
-            placeholder="Jawabanmu..."
-          />
-          &nbsp;
-          <button class="btn btn-success" type="submit">Jawab!</button>
-        </form>
+        <div id="answerForm">
+          <form @submit.prevent="nextQuestion">
+            <input
+              style="width: 400px;"
+              type="text"
+              name="answer"
+              v-model="answer"
+              placeholder="Jawabanmu..."
+            />
+            &nbsp;
+            <button class="btn btn-success" type="submit">Jawab!</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -48,26 +74,23 @@ export default {
   },
   created() {
     this.enterSoundGame();
+
     this.$store.dispatch("getQuestion");
-    socket.on("gameStart", (score) => {
-      const userScore = {
-        user: localStorage.user,
-        score: 0,
-      };
+    socket.on("gameStart", () => {
       this.gameOn = false;
-      console.log(this.gameOn, "ini di gamestart");
-      this.$store.commit("PUSH_SCORE", userScore);
-      this.$store.commit("PUSH_SCORE", score);
     });
-    socket.on("nextQuestion", (count) => {
-      this.count = count;
-    });
+    // socket.on("updateScore",  (user) => {
+    //     this.$store.dispatch('updateLeaderboard', user)
+    // })
     socket.on("pushAnswer", (answer) => {
       this.$store.commit("PUSH_ANSWER", answer);
     });
     socket.on("resetAnswer", () => {
       this.$store.commit("RESET_ANSWER");
     });
+    // socket.on("pushScore",  (score) => {
+    //     this.$store.commit('PUSH_SCORE', score)
+    // })
     socket.on("toLeaderBoard", () => {
       this.$router.push({ name: "LeaderBoard" });
     });
@@ -77,8 +100,8 @@ export default {
       this.count = data.count;
     });
 
-    socket.on("updateEnd", (data) => {
-      this.$store.commit("UPDATE_SCORE", data.user);
+    socket.on("updateEnd", () => {
+      // this.$store.commit('UPDATE_SCORE', data.user)
       this.$router.push({ name: "LeaderBoard" });
       this.$store.commit("RESET_ANSWER");
     });
@@ -89,6 +112,13 @@ export default {
       this.$router.push({ name: "Lobby" });
     },
     gameStart() {
+      // let userScore = {
+      //         name: localStorage.user,
+      //         score: 0
+      //     }
+      // this.$store.dispatch('addLeaderboard', userScore)
+      this.gameOn = false;
+      socket.emit("gameStart");
       const userScore = {
         user: localStorage.user,
         score: 0,
@@ -101,31 +131,47 @@ export default {
     nextQuestion() {
       this.$store.commit("PUSH_ANSWER", this.answer);
       socket.emit("pushAnswer", this.answer);
+      // console.log(this.count, `sebelum if`)
       if (this.count < 2) {
+        // console.log(this.answer, this.$store.state.questions[this.count].answer, 'ini answer')
         if (
           this.answer.toLowerCase() ==
           this.$store.state.questions[this.count].answer
         ) {
-          this.$store.commit("UPDATE_SCORE", localStorage.user);
+          this.score += 10;
+          // this.$store.commit('UPDATE_SCORE', localStorage.user)
+          // socket.emit("updateScore", localStorage.user)
+          // socket.emit("nextQuestion", this.count)
           this.count++;
-          console.log(this.count);
-          console.log(this.$store.state.finalScore);
           socket.emit("updatenext", {
             user: localStorage.user,
             count: this.count,
           });
+          // console.log(this.count, `ini dalam count`)
         }
-      } else if (
-        this.answer.toLowerCase() ==
-        this.$store.state.questions[this.count].answer
-      ) {
-        this.$store.commit("UPDATE_SCORE", localStorage.user);
-        this.$router.push({ name: "LeaderBoard" });
-        this.$store.commit("RESET_ANSWER");
-        socket.emit("updateEnd", { user: localStorage.user });
-        this.gameBacksound.pause();
-        this.gameBacksound.currentTime = 0;
+      } else {
+        if (
+          this.answer.toLowerCase() ==
+          this.$store.state.questions[this.count].answer
+        ) {
+          this.score += 10;
+          // this.$store.commit('UPDATE_SCORE', localStorage.user)
+          this.$store.commit("RESET_ANSWER");
+          socket.emit("updateEnd");
+          this.gameBacksound.pause();
+          this.gameBacksound.currentTime = 0;
+          this.$router.push({ name: "LeaderBoard" });
+        }
       }
+
+      if (this.count === 2) {
+        let userScore = {
+          name: localStorage.user,
+          score: this.score,
+        };
+        this.$store.dispatch("updateLeaderboard", userScore);
+      }
+      console.log(this.score, `ini score`);
       this.answer = "";
     },
     enterSoundGame() {
