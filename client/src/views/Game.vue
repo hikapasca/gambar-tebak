@@ -4,7 +4,7 @@
         <div v-else>
             <div id="question">
                 <h3>{{$store.state.questions[this.count].answer}}</h3>
-                <button class="btn btn-warning btn-sm">Leave Room</button>
+                <button @click="toLobby" class="btn btn-warning btn-sm">Leave Room</button>
                 <div id="image">
                     <img :src='$store.state.questions[this.count].imageUrl' alt="ini gambar.">
                 </div>
@@ -78,6 +78,10 @@ export default {
         })
     },
   methods: {
+    toLobby() {
+        this.$store.commit('RESET_SCORE')
+        this.$router.push({name: 'Lobby'})
+    },
     gameStart() {
         let userScore = {
                 user: localStorage.user,
