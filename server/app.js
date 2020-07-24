@@ -19,9 +19,24 @@ io.on('connection', (socket) => {
   socket.emit('visited', "Hi kamu berhasik konek ke server kami");
 
   socket.on("gameStart", function (userScore) {
-    io.emit("gameStart", userScore);
+    socket.broadcast.emit("gameStart", userScore);
     // io.emit("new-message", messageDariClient)
   })
+
+  // socket.on("updateScore", function (userScore) {
+  //   io.emit("updateScore", userScore);
+  //   // io.emit("new-message", messageDariClient)
+  // })
+
+  socket.on("gameOn", function (user) {
+    socket.broadcast.emit("gameOn", user);
+    // io.emit("new-message", messageDariClient)
+  })
+
+  // socket.on("deleteScore", function () {
+  //   io.emit("deleteScore");
+  //   // io.emit("new-message", messageDariClient)
+  // })
 
   socket.on("nextQuestion", function (count) {
     socket.broadcast.emit("nextQuestion", count);
@@ -39,7 +54,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on("updateScore", function (user) {
-    socket.broadcast.emit("updateScore", user);
+    io.emit("updateScore", user);
     // io.emit("new-message", messageDariClient)
   })
 
@@ -48,8 +63,8 @@ io.on('connection', (socket) => {
     // io.emit("new-message", messageDariClient)
   })
 
-  socket.on("updateEnd", function (data) {
-    socket.broadcast.emit("updateEnd", data);
+  socket.on("updateEnd", function () {
+    socket.broadcast.emit("updateEnd");
     // io.emit("new-message", messageDariClient)
   })
 
