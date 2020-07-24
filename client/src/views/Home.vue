@@ -21,15 +21,15 @@ export default {
   data() {
     return {
       user: '',
-    }
+    };
   },
   methods: {
     addUser() {
-      this.$store.commit('ADD_USER', this.user)
-      localStorage.setItem(`user`, this.user)
-      this.$router.push({name: 'Lobby'})
-    }
-  }
+      this.$store.commit('ADD_USER', this.user);
+      localStorage.setItem('user', this.user);
+      this.$router.push({ name: 'Lobby' });
+    },
+  },
 };
 </script>
 

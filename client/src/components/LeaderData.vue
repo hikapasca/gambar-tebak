@@ -1,17 +1,16 @@
 <template>
-    <tr>
-        <th scope="row">{{score.user}}</th>
-        <td>{{score.score}}</td>
-    </tr>
+  <tr>
+    <th scope="row">{{score.name}}</th>
+    <td>{{score.score}}</td>
+  </tr>
 </template>
 
 <script>
 export default {
   name: 'LeaderData',
-  props: ['score']
+  props: ['score'],
 };
 </script>
 
 <style>
-
 </style>

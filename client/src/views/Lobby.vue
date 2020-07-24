@@ -37,9 +37,10 @@
 </template>
 
 <script>
+import io from 'socket.io-client';
 import Room from '../components/Room.vue';
-import io from "socket.io-client";
-const socket = io("http://localhost:3000");
+
+const socket = io('http://localhost:3000');
 
 export default {
   name: 'Lobby',
@@ -53,28 +54,28 @@ export default {
   },
   computed: {
     userName() {
-        return localStorage.user
-    }
+      return localStorage.user;
+    },
   },
   methods: {
     toLeaderBoard() {
-        this.$router.push({name: 'LeaderBoard'})
+      this.$router.push({ name: 'LeaderBoard' });
     },
     logout() {
-        localStorage.clear()
-        this.$router.push({name: 'Home'})
+      localStorage.clear();
+      this.$router.push({ name: 'Home' });
     },
 
     playGame() {
-        let userScore = {
-                name: localStorage.user,
-                score: 0
-            }
-        this.$store.dispatch('addLeaderboard', userScore)
-        // socket.emit("gameOn", userScore)
-        this.$router.push({name: 'Game'})
-    }
-  }
+      const userScore = {
+        name: localStorage.user,
+        score: 0,
+      };
+      this.$store.dispatch('addLeaderboard', userScore);
+      // socket.emit("gameOn", userScore)
+      this.$router.push({ name: 'Game' });
+    },
+  },
 };
 </script>
 

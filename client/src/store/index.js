@@ -13,35 +13,35 @@ export default new Vuex.Store({
     allAnswers: [],
     finalScore: [],
     username: '',
-    dataUser: []
+    dataUser: [],
   },
   mutations: {
     ADD_USER(state, payload) {
-      state.username = payload
+      state.username = payload;
     },
     READ_LEADERBOARD(state, payload) {
       state.leaderboard = payload;
     },
     READ_QUESTION(state, payload) {
-      state.questions = payload
+      state.questions = payload;
       // console.log(state.questions, `ini di mutasi`)
     },
     PUSH_ANSWER(state, payload) {
-      state.allAnswers.push(payload)
+      state.allAnswers.push(payload);
     },
     PUSH_SCORE(state, payload) {
-      state.finalScore.push(payload)
+      state.finalScore.push(payload);
     },
     UPDATE_SCORE(state, payload) {
-      state.finalScore.forEach(element => {
+      state.finalScore.forEach((element) => {
         if (element.user === payload) {
-          element.score+=10
+          element.score += 10;
         }
       });
     },
     ADDED_SCORE(state, payload) {
-      state.dataUser = payload
-      console.log(state.dataUser, `ini show all`)
+      state.dataUser = payload;
+      console.log(state.dataUser, 'ini show all');
     },
     UPDATED_SCORE(state, payload) {
       // for (let i = 0; i < state.dataUser.length; i++) {
@@ -51,12 +51,12 @@ export default new Vuex.Store({
       // }
     },
     RESET_ANSWER(state) {
-      state.allAnswers = []
+      state.allAnswers = [];
     },
     RESET_SCORE(state) {
-      state.finalScore = []
-      state.dataUser = []
-    }
+      state.finalScore = [];
+      state.dataUser = [];
+    },
   },
   actions: {
     getQuestion(context) {
@@ -77,60 +77,60 @@ export default new Vuex.Store({
       // const score = payload.score;
       const updateLeaderboard = {
         name: payload.name,
-        score: payload.score
+        score: payload.score,
       };
-      console.log(updateLeaderboard, `ini yg mau update`)
+      console.log(updateLeaderboard, 'ini yg mau update');
       axios({
-        method: "PUT",
-        url: "http://localhost:3000/leaderboards",
-        data: updateLeaderboard
+        method: 'PUT',
+        url: 'http://localhost:3000/leaderboards',
+        data: updateLeaderboard,
       })
-        .then(result => {
-          console.log("update masuk diluar");
+        .then((result) => {
+          console.log('update masuk diluar');
           // context.commit("UPDATED_SCORE", updateLeaderboard);
         })
-        .catch(err => {});
+        .catch((err) => {});
     },
     deleteLeaderboard(context, payload) {
       // console.log("update masuk didalam");
       axios({
-        method: "DELETE",
-        url: "http://localhost:3000/leaderboards"
+        method: 'DELETE',
+        url: 'http://localhost:3000/leaderboards',
       })
-        .then(result => {
+        .then((result) => {
           // console.log("update masuk diluar");
-          context.commit("RESET_SCORE");
+          context.commit('RESET_SCORE');
         })
-        .catch(err => {});
+        .catch((err) => {});
     },
     addLeaderboard(context, payload) {
       // console.log("add masuk diluar");
       const newLeaderboard = {
         name: payload.name,
-        score: payload.score
+        score: payload.score,
       };
       axios({
-        method: "POST",
-        url: "http://localhost:3000/leaderboards",
-        data: newLeaderboard
+        method: 'POST',
+        url: 'http://localhost:3000/leaderboards',
+        data: newLeaderboard,
       })
-        .then(result => {
+        .then((result) => {
           // console.log("add masuk didalam");
           // context.commit("ADDED_SCORE", newLeaderboard);
         })
-        .catch(err => {});
+        .catch((err) => {});
     },
     showLeaderboard(context) {
       axios({
-        method: "GET",
-        url: "http://localhost:3000/leaderboards"
+        method: 'GET',
+        url: 'http://localhost:3000/leaderboards',
       })
-        .then(result => {
+        .then((result) => {
           // console.log("add masuk didalam");
-          context.commit("ADDED_SCORE", result.data);
+          context.commit('ADDED_SCORE', result.data);
         })
-        .catch(err => {});
-    }
+        .catch((err) => {});
+    },
   },
   modules: {},
 });
