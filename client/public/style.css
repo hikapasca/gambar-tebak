@@ -5,14 +5,54 @@
 
 #homepage {
     text-align: center;
-    padding: 230px;
-    background: yellow;
+    padding: 180px;
+    background-image: url(https://nuansalembayung.files.wordpress.com/2011/10/yao-ming-heck.png);
+    background-size: 200px;
+    background-repeat: repeat;
+    font-family: 'Luckiest Guy', cursive;
+}
+
+.boxHome {
+    background: black;
+    color: white;
+    width: 500px;
+    display: block;
+    margin: 0px auto;
+    padding: 70px;
+    border-radius: 50px;
+}
+
+#buttonBeforeGame {
+    margin-top: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Luckiest Guy', cursive;
 }
 
 #lobby {
-    background: green;
+    font-family: 'Luckiest Guy', cursive;
+    background-image: url(https://nuansalembayung.files.wordpress.com/2011/10/yao-ming-heck.png);
+    background-size: 200px;
+    height: 600px;
     padding: 50px;
     font-weight: bold;
+}
+
+#navbar {
+    font-family: 'Luckiest Guy', cursive;
+    background: transparent;
+}
+
+#homeBox {
+    background:black;
+    color: white;
+    width: 600px;
+    display: block;
+    margin: 0px auto;
+    padding: 30px;
+    border-radius: 50px;
 }
 
 #lobby h2 {
@@ -22,8 +62,15 @@
 
 #roomForm {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     text-align: center;
+   
+}
+
+#buttonAfterRoom {
+    display: flex;
+    justify-content: center;;
 }
 
 #answerForm {
@@ -32,15 +79,28 @@
 }
 
 #gameRoom {
-    background: maroon;
+    background: #515151;
     padding: 10px;
     height: 610px;
+    font-family: 'Luckiest Guy', cursive;
+}
+
+#buttonGame {
+    width: 200px;
+    height: 100px;
+    font-size: 50px;
+}
+
+#image {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 30px 0px;
 }
 
 #question img {
-    display: block;
-    margin: 20px auto;
-    width: 400px;
+    width: 370px;
+    height: 370px;
 }
 
 #question h3 {
@@ -61,20 +121,37 @@
 }
 
 .box {
-    background-color: linen;
+    background-color: tomato;
     padding: 20px;
-    height: 200px;
+    height: 250px;
     border-radius: 50px;
     margin: 10px;
 }
 
+#boxLeader {
+    background: yellow;
+    width: 800px;
+    display: block;
+    margin: 100px auto;
+    padding: 30px;
+    border-radius: 50px;
+}
+
 #leaderHeader {
     text-align: center;
-    margin: 30px;
 }
 
 #leaderTable {
-    padding: 20px 400px;
+    padding: 20px 100px;
     text-align: center;
+}
+
+#leaderboard {
+    background-image: url(https://nuansalembayung.files.wordpress.com/2011/10/yao-ming-heck.png);
+    background-size: 200px;
+    background-repeat: repeat;
+    height: 610px;
+    padding: 50px;
+    font-family: 'Luckiest Guy', cursive;
 }
 
