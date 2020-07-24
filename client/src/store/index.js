@@ -1,6 +1,6 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import axios from 'axios';
+import Vue from "vue";
+import Vuex from "vuex";
+import axios from "axios";
 // import io from "socket.io-client";
 // const socket = io("http://localhost:3000");
 
@@ -12,36 +12,36 @@ export default new Vuex.Store({
     questions: [],
     allAnswers: [],
     finalScore: [],
-    username: '',
+    username: "",
     dataUser: []
   },
   mutations: {
     ADD_USER(state, payload) {
-      state.username = payload
+      state.username = payload;
     },
     READ_LEADERBOARD(state, payload) {
       state.leaderboard = payload;
     },
     READ_QUESTION(state, payload) {
-      state.questions = payload
+      state.questions = payload;
       // console.log(state.questions, `ini di mutasi`)
     },
     PUSH_ANSWER(state, payload) {
-      state.allAnswers.push(payload)
+      state.allAnswers.push(payload);
     },
     PUSH_SCORE(state, payload) {
-      state.finalScore.push(payload)
+      state.finalScore.push(payload);
     },
     UPDATE_SCORE(state, payload) {
       state.finalScore.forEach(element => {
         if (element.user === payload) {
-          element.score+=10
+          element.score += 10;
         }
       });
     },
     ADDED_SCORE(state, payload) {
-      state.dataUser = payload
-      console.log(state.dataUser, `ini show all`)
+      state.dataUser = payload;
+      console.log(state.dataUser, `ini show all`);
     },
     UPDATED_SCORE(state, payload) {
       // for (let i = 0; i < state.dataUser.length; i++) {
@@ -51,24 +51,24 @@ export default new Vuex.Store({
       // }
     },
     RESET_ANSWER(state) {
-      state.allAnswers = []
+      state.allAnswers = [];
     },
     RESET_SCORE(state) {
-      state.finalScore = []
-      state.dataUser = []
+      state.finalScore = [];
+      state.dataUser = [];
     }
   },
   actions: {
     getQuestion(context) {
       axios({
-        method: 'GET',
-        url: 'http://localhost:3000/questions',
+        method: "GET",
+        url: "http://localhost:3000/questions"
       })
-        .then((result) => {
+        .then(result => {
           // console.log(result, `ini result`);
-          context.commit('READ_QUESTION', result.data);
+          context.commit("READ_QUESTION", result.data);
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err.response);
         });
     },
@@ -79,7 +79,7 @@ export default new Vuex.Store({
         name: payload.name,
         score: payload.score
       };
-      console.log(updateLeaderboard, `ini yg mau update`)
+      console.log(updateLeaderboard, `ini yg mau update`);
       axios({
         method: "PUT",
         url: "http://localhost:3000/leaderboards",
@@ -132,5 +132,5 @@ export default new Vuex.Store({
         .catch(err => {});
     }
   },
-  modules: {},
+  modules: {}
 });
